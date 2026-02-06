@@ -1,0 +1,31 @@
+# Sub-repos (cloned by setup.sh)
+unitree_rl_lab/
+unitree_mujoco/
+unitree_sdk2/
+ICRA2023_Quadruped_Robot_Challenges/
+ICRA2024_Quadruped_Robot_Challenges/
+
+# PDFs
+*.pdf
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Build artifacts
+build/
+*.o
+*.a
+*.so
+
+# Logs
+*.log
+
+# Claude Code
+.claude/
