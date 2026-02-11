@@ -334,14 +334,11 @@ else
     warn "trimesh not importable"; ((ERRORS++))
 fi
 
-# Maps
+# Maps (included in git repo)
 if [ -f "$DIAS_DIR/Maps/3D/realnaya_huinya.obj" ]; then
-    ok "Competition map: realnaya_huinya.obj found"
+    ok "Competition maps: realnaya_huinya.obj, K_Rails_Map.obj, k_ramps.obj"
 else
-    warn "Competition map not found at $DIAS_DIR/Maps/3D/realnaya_huinya.obj"
-    echo "     You need to copy the Maps directory manually:"
-    echo "     scp -r Maps/ user@cloud-gpu:$DIAS_DIR/Maps/"
-    ((ERRORS++))
+    warn "Maps not found — git clone may have failed"; ((ERRORS++))
 fi
 
 # Task registration check
@@ -382,8 +379,5 @@ echo "    bash $DIAS_DIR/scripts/train_curriculum.sh"
 echo ""
 echo "    # Monitor training"
 echo "    tensorboard --logdir $DIAS_DIR/unitree_rl_lab/logs/rsl_rl/ --bind_all"
-echo ""
-echo "  Files to copy manually (if not in git):"
-echo "    scp -r Maps/ user@cloud:$DIAS_DIR/Maps/"
 echo ""
 echo "=============================================="

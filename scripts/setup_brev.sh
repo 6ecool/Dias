@@ -18,15 +18,13 @@
 #   - Все зависимости (trimesh, tensorboard, onnx, etc.)
 #
 # Использование:
-#   # 1. Создай Brev instance с GPU (A100/H100/L40S)
-#   # 2. Подключись по SSH или через Brev CLI
-#   # 3. Запусти:
-#   bash setup_brev.sh
+#   # Одна команда — всё с нуля:
+#   curl -sL https://raw.githubusercontent.com/6ecool/Dias/master/scripts/setup_brev.sh | bash
 #
 #   # После установки:
 #   source ~/.bashrc
 #   conda activate isaaclab_go2
-#   bash ~/robotics/projects/Dias/scripts/train_curriculum.sh --phase 1
+#   bash ~/robotics/projects/Dias/scripts/train_curriculum.sh
 #
 # =============================================================================
 set -e
@@ -305,13 +303,11 @@ python -c "import unitree_rl_lab" &>/dev/null && ok "unitree_rl_lab" || { warn "
 # trimesh
 python -c "import trimesh" &>/dev/null && ok "trimesh" || { warn "trimesh"; ((ERRORS++)); }
 
-# Maps
+# Maps (included in git repo)
 if [ -f "$DIAS_DIR/Maps/3D/realnaya_huinya.obj" ]; then
-    ok "Competition map found"
+    ok "Competition maps: realnaya_huinya.obj, K_Rails_Map.obj, k_ramps.obj"
 else
-    warn "Map not found: $DIAS_DIR/Maps/3D/realnaya_huinya.obj"
-    echo -e "     ${YELLOW}Copy manually: scp -r Maps/ user@brev:$DIAS_DIR/Maps/${NC}"
-    ((ERRORS++))
+    warn "Maps not found — git clone may have failed"; ((ERRORS++))
 fi
 
 # Task registration
@@ -341,17 +337,11 @@ echo "  Training commands:"
 echo ""
 echo "    conda activate $CONDA_ENV"
 echo ""
-echo "    # Phase 1: flat terrain, from scratch (~30 min)"
-echo "    bash $DIAS_DIR/scripts/train_curriculum.sh --phase 1"
-echo ""
-echo "    # Phase 2: terrain (resume from Phase 1)"
-echo "    bash $DIAS_DIR/scripts/train_curriculum.sh --phase 2 --load_run <phase1_dir>"
-echo ""
-echo "    # Phase 3: competition map (resume from Phase 2)"
-echo "    bash $DIAS_DIR/scripts/train_curriculum.sh --phase 3 --load_run <phase2_dir>"
-echo ""
-echo "    # Or ALL phases automatically:"
+echo "    # All 3 phases automatically (~1-1.5h on H100):"
 echo "    bash $DIAS_DIR/scripts/train_curriculum.sh"
+echo ""
+echo "    # Or one phase at a time:"
+echo "    bash $DIAS_DIR/scripts/train_curriculum.sh --phase 1"
 echo ""
 echo "    # Monitor:"
 echo "    tensorboard --logdir $DIAS_DIR/unitree_rl_lab/logs/rsl_rl/ --bind_all"
